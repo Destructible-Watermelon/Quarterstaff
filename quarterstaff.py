@@ -42,14 +42,10 @@ class QuarterstaffInterpreter:
                 parsed_prog.append(-1)
             elif program_string[char_index] == ".":
                 parsed_prog.append(0)
-            elif program_string[char_index] == "=":
-                parsed_prog.append(1)
-            elif program_string[char_index] == "%":
-                parsed_prog.append(2)
             elif program_string[char_index] == "?":
-                parsed_prog.append(3)
+                parsed_prog.append(1)
             elif program_string[char_index] == "!":
-                parsed_prog.append(4)
+                parsed_prog.append(2)
             elif program_string[char_index] in brackets_dict:
                 char_offset=0
                 if program_string[char_index]=="(":
@@ -96,11 +92,7 @@ class QuarterstaffInterpreter:
                     value *= -1
                 elif i == 0: # .
                     value = 0
-                elif i == 1: # =
-                    value = 0 if value == 0 else (-1 if value < 0 else 1)
-                elif i == 2: # %
-                    value %= 2
-                elif i == 3: # ?
+                elif i == 1: # ?
                     if not eof:
                         if self.input is None:
                             try:
@@ -116,7 +108,7 @@ class QuarterstaffInterpreter:
                         else:
                             value += ord(self.input[self.input_index])
                             self.input_index += 1
-                elif i == 4: # !
+                elif i == 2: # !
                     print(chr(value),end="")
                     value = 0
             else: # type(i) is tuple or whatever
