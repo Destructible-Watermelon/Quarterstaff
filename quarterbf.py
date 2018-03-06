@@ -4,6 +4,7 @@ class QuarterBFInterpreter:
         program = re.sub(r"[^+\-<>.,\[\]]", "", program)
         self.input = None
         self.input_index = 0
+        self.eof = False
         self.run(self.parse(program), [0], 0)
     def parse(self, program_string):
         i=0
@@ -50,17 +51,16 @@ class QuarterBFInterpreter:
         return tuple(parsed_prog)
 
     def run(self, program, tape, tape_pointer):
-        eof = False
         for i in program:
             if i == 0:
-                if eof:
+                if self.eof:
                     tape[tape_pointer]=0
                 else:
                     if self.input is None:
                         try:
                             self.input = input()
                         except EOFError:
-                            eof= True
+                            self.eof= True
                             self.input = chr(0)
 
                     if self.input_index==len(self.input):

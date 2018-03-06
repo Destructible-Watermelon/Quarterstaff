@@ -3,6 +3,7 @@ class QuarterstaffInterpreter:
     def __init__(self, program):
         self.input = None
         self.input_index = 0
+        self.eof = False
         self.run(self.parse(program), {}, 0)
     def parse(self, program_string):
         char_index=0
@@ -85,7 +86,6 @@ class QuarterstaffInterpreter:
 
 
     def run(self,program, var_dict, value):
-        eof = False
         for i in program:
             if type(i) is int:
                 if i == -1:  # -
@@ -93,12 +93,12 @@ class QuarterstaffInterpreter:
                 elif i == 0: # .
                     value = 0
                 elif i == 1: # ?
-                    if not eof:
+                    if not self.eof:
                         if self.input is None:
                             try:
                                 self.input = input()
                             except EOFError:
-                                eof= True
+                                self.eof= True
                                 self.input = chr(0)
 
                         if self.input_index==len(self.input):
