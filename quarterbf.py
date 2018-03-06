@@ -82,6 +82,8 @@ class QuarterBFInterpreter:
                 tape_pointer += i[-1]
                 if tape_pointer >= len(tape):
                     tape.extend([0]*(tape_pointer-len(tape)+1))
+                if tape_pointer < 0:
+                    raise Exception
             elif i[0] == 1:
                 while tape[tape_pointer]:
                     tape, tape_pointer = self.run(i[1:], tape, tape_pointer)
