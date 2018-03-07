@@ -4,7 +4,7 @@ class QuarterstaffInterpreter:
         self.input = None
         self.input_index = 0
         self.eof = False
-        (self.run(self.parse(program), {}, 0)[1])
+        self.run(self.parse(program), {}, 0)
     def parse(self, program_string):
         char_index=0
         brackets_dict ={"{":"}","[":"]","(":")"}
