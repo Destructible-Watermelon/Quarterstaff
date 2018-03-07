@@ -62,7 +62,7 @@ class QuarterstaffInterpreter:
                         scope += 1
                     elif program_string[char_index+char_offset] in brackets_dict.values():
                         scope -= 1
-                    elif scope == 1 and program_string[char_index+char_offset] in ":|":
+                    elif scope == 1 and program_string[char_index+char_offset] == "|":
                         midpoint = char_offset
                 if program_string[char_index+char_offset] != brackets_dict[program_string[char_index]]:
                     raise Exception
@@ -80,7 +80,7 @@ class QuarterstaffInterpreter:
                                 self.parse(program_string[char_index+1+midpoint:char_index+char_offset])))
 
                 step = char_offset+1
-            elif program_string[char_index] in "|:":
+            elif program_string[char_index] == "|":
                 raise Exception
             char_index += step
         return tuple(parsed_prog)
