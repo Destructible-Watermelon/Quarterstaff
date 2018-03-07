@@ -4,7 +4,7 @@ class QuarterstaffInterpreter:
         self.input = None
         self.input_index = 0
         self.eof = False
-        self.run(self.parse(program), {}, 0)
+        (self.run(self.parse(program), {}, 0)[1])
     def parse(self, program_string):
         char_index=0
         brackets_dict ={"{":"}","[":"]","(":")"}
@@ -13,31 +13,33 @@ class QuarterstaffInterpreter:
         while char_index < len(program_string):
             step = 1
             if program_string[char_index].isnumeric():
-                end=re.search("[^0-9]",program_string[char_index:]).start()
-                if end == -1:
+                end=re.search("[^0-9]",program_string[char_index:])
+                if end is None:
                     number = program_string[char_index:]
                     step = len(program_string)-char_index
                 else:
-                    number = program_string[char_index:][:end]
-                    step = end
+                    number = program_string[char_index:][:end.start()]
+                    step = end.start()
                 parsed_prog.append((0,int(number)))
             elif program_string[char_index].isalpha():
-                end=re.search("[^A-Za-z]",program_string[char_index:]).start()
-                if end == -1:
+                end=re.search("[^A-Za-z]",program_string[char_index:])
+                if end is None:
                     variable = program_string[char_index:]
+                    step = len(program_string)-char_index
                 else:
-                    variable = program_string[char_index:][:end]
+                    variable = program_string[char_index:][:end.start()]
+                    step = end.start()
                 parsed_prog.append((1,variable))
             elif program_string[char_index] == ">":
                 if not program_string[char_index+1].isalpha():
                     raise Exception
-                end=re.search("[^A-Za-z]",program_string[char_index+1:]).start()
-                if end == -1:
+                end=re.search("[^A-Za-z]",program_string[char_index+1:])
+                if end is None:
                     variable = program_string[char_index+1:]
                     step = len(program_string)-char_index
                 else:
-                    variable = program_string[char_index+1:][:end]
-                    step = end+1
+                    variable = program_string[char_index+1:][:end.start()]
+                    step = end.start()+1
                 parsed_prog.append((2,variable))
             elif program_string[char_index] == "-":
                 parsed_prog.append(-1)
@@ -130,7 +132,7 @@ class QuarterstaffInterpreter:
                     elif i[0] == 5:
                         if value:
                             var_dict, value = self.run(i[1],var_dict,value)
-                        else:
+                        elif len(i) == 3:
                             var_dict, value = self.run(i[2],var_dict,value)
         return var_dict, value
 if __name__ == "__main__":
