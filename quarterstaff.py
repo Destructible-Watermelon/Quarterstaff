@@ -69,18 +69,18 @@ class QuarterstaffInterpreter:
                 else:
                     if midpoint == None:
                         parsed_prog.append((3+"[{(".find(program_string[char_index]),
-                                        self.parse(program_string[char_index+1:][:char_offset])))
+                                        self.parse(program_string[char_index+1:][:char_offset-1])))
                     else:
                         if midpoint == -1:
                              parsed_prog.append((3+"[{(".find(program_string[char_index]),
-                                self.parse(program_string[char_index+1:][:char_offset])))
+                                self.parse(program_string[char_index+1:][:char_offset-1])))
                         else:
                             parsed_prog.append((3+"[{(".find(program_string[char_index]),
                                 self.parse(program_string[char_index+1:][:midpoint-1]),
                                 self.parse(program_string[char_index+1+midpoint:char_index+char_offset])))
 
                 step = char_offset+1
-            elif program_string[char_index] == "|":
+            elif program_string[char_index] == "|" or program_string[char_index] in brackets_dict.values():
                 raise Exception
             char_index += step
         return tuple(parsed_prog)
