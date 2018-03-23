@@ -35,6 +35,8 @@ class QuarterBFInterpreter:
                     elif program_string[i] == "<":
                         offset -= 1
                     i += 1
+                for j in effects:
+                    effects[j]%=256
                 parsed_prog.append((0,)+ tuple(effects.items()) + (offset,))
 
             elif program_string[i] == "[":
@@ -76,14 +78,18 @@ class QuarterBFInterpreter:
             elif i[0] == 0:
                 for cell_change in i[1:-1]:
                     cells_from_right = (len(tape)-(tape_pointer + 1))
-                    if cell_change[0]-cells_from_right > 0:
+                    if cell_change[0] > cells_from_right:
                         tape.extend([0]*(cell_change[0]-cells_from_right))
+                    if tape_pointer+cell_change[0]<0:
+                        raise Exception
                     tape[tape_pointer+cell_change[0]] += cell_change[1]
+                    if tape[tape_pointer+cell_change[0]] >= 256:
+                        tape[tape_pointer+cell_change[0]]-=256
                 tape_pointer += i[-1]
                 if tape_pointer >= len(tape):
                     tape.extend([0]*(tape_pointer-len(tape)+1))
                 if tape_pointer < 0:
-                    raise Exception
+                        raise Exception
             elif i[0] == 1:
                 while tape[tape_pointer]:
                     tape, tape_pointer = self.run(i[1:], tape, tape_pointer)
